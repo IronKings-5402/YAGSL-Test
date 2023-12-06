@@ -26,9 +26,11 @@ public class TeleDrive extends CommandBase{
 
     @Override
     public void execute() {
-        
-        swerve.drive(new Translation2d(xVelocity, yVelocity),
-        angVelocity, true, false);
+        ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(xVelocity, yVelocity,
+                                                         new Rotation2d(angVelocity * Math.PI));
+        Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
+        swerve.drive(translation,
+        desiredSpeeds.omegaRadiansPerSecond, true, false);
     }
 
     
