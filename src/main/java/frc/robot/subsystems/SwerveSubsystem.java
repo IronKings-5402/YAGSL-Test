@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
+import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -22,10 +23,14 @@ public class SwerveSubsystem extends SubsystemBase {
   SwerveDrive swerveDrive;
   public double maximumSpeed;
   public SwerveSubsystem(){
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(150.0/7.0, 2048);
+   
+    double driveConversionFactor = SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.12, 2048);
+
     this.maximumSpeed = Units.feetToMeters(4.5);
     File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
     try {
-      this.swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(this.maximumSpeed);
+      this.swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(this.maximumSpeed,angleConversionFactor, driveConversionFactor);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
